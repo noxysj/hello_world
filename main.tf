@@ -17,7 +17,7 @@ resource "docker_image" "nginx" {
 
 resource "docker_network" "private_network" {
   name = "my_docker_network"
-  
+
 }
 
 resource "docker_image" "php" {
@@ -26,9 +26,9 @@ resource "docker_image" "php" {
 }
 
 resource "docker_container" "php" {
-  name     = "tutorial_php"
-  restart  = "always"
-  image    = docker_image.php.latest
+  name    = "tutorial_php"
+  restart = "always"
+  image   = docker_image.php.latest
   networks_advanced {
     name = "my_docker_network"
   }
@@ -49,8 +49,9 @@ resource "docker_container" "nginx" {
     external = 8000
   }
   upload {
-    source = "site.conf"
-    file   = "/etc/nginx/conf.d/default.conf"
+    source      = "site.conf"
+    source_hash = filebase64("${path.module}/site.conf")
+    file        = "/etc/nginx/conf.d/default.conf"
   }
   volumes {
     host_path      = "/E/Documents/Data/Git/hello_world/code"
